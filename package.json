@@ -1,0 +1,23 @@
+{
+  "name": "flux-reading",
+  "description": "Simple app with React-Flux",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "watch": "nodemon server.js"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ledomone/flux-reading.git"
+  },
+  "author": "ledomone",
+  "bugs": {
+    "url": "https://github.com/ledomone/flux-reading/issues"
+  },
+  "homepage": "https://github.com/ledomone/flux-reading#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}

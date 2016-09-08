@@ -1,8 +1,34 @@
 var gulp = require('gulp');
+var concat = require('gulp-concat');
+var gulpif = require('gulp-if');
+var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
 
-gulp.task('sass', function() {
+var production = process.env.NODE_ENV === 'production';
+
+
+/*
+ |--------------------------------------------------------------------------
+ | Combine all JS libraries into a single file for fewer HTTP requests.
+ |--------------------------------------------------------------------------
+ */
+gulp.task('vendor', function() {
+  return gulp.src([
+    'bower_components/jquery/dist/jquery.js',
+    'bower_components/toastr/toastr.js'
+  ]).pipe(concat('vendor.js'))
+    .pipe(gulpif(production, uglify({ mangle: false })))
+    .pipe(gulp.dest('public/js'));
+});
+
+
+/*
+ |--------------------------------------------------------------------------
+ | Compile SASS stylesheets.
+ |--------------------------------------------------------------------------
+ */
+gulp.task('styles', function() {
   gulp.src('app/stylesheets/style.scss')
   .pipe(plumber())
   .pipe(sass())
@@ -10,7 +36,8 @@ gulp.task('sass', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('app/stylesheets/*.scss', ['sass']);
+  gulp.watch('app/stylesheets/*.scss', ['styles']);
 });
 
-gulp.task('default', ['sass', 'watch']);
+gulp.task('default', ['styles', 'watch']);
+gulp.task('build', ['styles', 'vendor']);

@@ -1,0 +1,21 @@
+{
+  "name": "flux-reading",
+  "description": "Simple app with React-Flux",
+  "main": "server.js",
+  "authors": [
+    "ledomone"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ledomone/flux-reading",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "toastr": "^2.1.3"
+  }
+}

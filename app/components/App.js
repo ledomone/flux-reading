@@ -1,11 +1,10 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { Route } from 'react-router';
 
 class App extends React.Component {
   render() {
     return (
-      <div> Hello from React app component
+      <div>
+        <h1>Hello from React app component </h1>
         {this.props.children}
       </div>
     );

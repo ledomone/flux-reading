@@ -3,14 +3,12 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 
-var React = require('react');
-var ReactDOM = require('react-dom/server');
-// var Router = require('react-router').Router;
-import { Router } from 'react-router';
+import React from 'react';
+import { renderToString } from 'react-dom/server'
+import { match, RouterContext } from 'react-router'
+import routes from './app/routes';
 
 var swig  = require('swig');
-
-var routes = require('./app/routes');
 
 var app = express();
 
@@ -20,28 +18,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(__dirname + '/public/books.png'));
 
 // middleware
-app.use(function (req, res) {
+app.use((req, res) => {
   // Note that req.url here should be the full URL path from
   // the original request, including the query string.
-    Router.match({
-      routes: routes.default,
-      location: req.url
-    }, function (err, redirectLocation, renderProps) {
+    match({ routes: routes, location: req.url }, (err, redirectLocation, renderProps) => {
+
       if (err) {
         res.status(500).send(err.message);
       } else if (redirectLocation) {
-        res.status(302).redirect(redirectLocation.pathname + redirectLocation.search);
+        res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       } else if (renderProps) {
         // You can also check renderProps.components or renderProps.routes for
         // your "not found" component or route respectively, and send a 404 as
         // below, if you're using a catch-all route.
-        var html = ReactDOM.renderToString(React.createElement(Router.RouterContext, renderProps));
-        var page = swig.renderFile('views/index.html', {
-          html: html
-        });
+
+        let html = renderToString(<RouterContext {...renderProps} />);
+        let page = swig.renderFile('views/index.html', { html: html });
         res.status(200).send(page);
       } else {
-        res.status(404).send('Page Not Found');
+        res.status(404).send('Page Not Found :(');
       }
     });
 });

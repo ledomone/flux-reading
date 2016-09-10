@@ -11,6 +11,7 @@ var source = require('vinyl-source-stream');
 var babelify = require('babelify');
 var watchify = require('watchify');
 var sourcemaps = require('gulp-sourcemaps');
+var resolutions = require('browserify-resolutions');
 
 var production = process.env.NODE_ENV === 'production';
 
@@ -59,6 +60,7 @@ gulp.task('browserify-vendor', function() {
 gulp.task('browserify', ['browserify-vendor'], function() {
   return browserify({ entries: 'app/main.js', debug: true })
     .external(dependencies)
+    .plugin(resolutions, '*')
     .transform(babelify, { presets: ['es2015', 'react'] })
     .bundle()
     .pipe(source('bundle.js'))

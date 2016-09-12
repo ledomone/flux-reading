@@ -23,6 +23,7 @@ var dependencies = [
   // 'underscore'
 ];
 
+
 /*
  |--------------------------------------------------------------------------
  | Combine all JS libraries into a single file for fewer HTTP requests.
@@ -31,6 +32,19 @@ var dependencies = [
 gulp.task('vendor', function() {
   return gulp.src([
     'bower_components/jquery/dist/jquery.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/affix.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/alert.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/button.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/carousel.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/collapse.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/dropdown.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/tab.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/transition.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/scrollspy.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/modal.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/tooltip.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap/popover.js',
+    'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js',
     'bower_components/toastr/toastr.js'
   ]).pipe(concat('vendor.js'))
     .pipe(gulpif(production, uglify({ mangle: false })))
@@ -100,21 +114,24 @@ gulp.task('browserify-watch', ['browserify-vendor'], function() {
   }
 });
 
-
 /*
  |--------------------------------------------------------------------------
  | Compile SASS stylesheets.
  |--------------------------------------------------------------------------
  */
 gulp.task('styles', function() {
-  gulp.src('app/stylesheets/style.scss')
+  gulp.src(['app/stylesheets/**/*.scss'])
   .pipe(plumber())
-  .pipe(sass())
+  .pipe(sass().on('error', sass.logError))
   .pipe(gulp.dest('public/css'));
+
+  //copy over the bootstrap fonts
+  gulp.src('bower_modules/bootstrap-sass/assets/fonts/bootstrap/*')
+      .pipe(gulp.dest('public/fonts'));
 });
 
 gulp.task('watch', function() {
-  gulp.watch('app/stylesheets/*.scss', ['styles']);
+  gulp.watch('app/stylesheets/**/*.scss', ['styles']);
 });
 
 gulp.task('default', ['styles', 'vendor', 'browserify-watch', 'watch']);

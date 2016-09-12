@@ -5815,7 +5815,8 @@ button.close {
     display: none !important; } }
 
 body {
-  padding-bottom: 20px; }
+  padding-bottom: 20px;
+  padding-top: 70px; }
 
 em {
   font-style: normal;
